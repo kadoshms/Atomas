@@ -6,25 +6,34 @@
 define([
         'jquery',
         'classes/utils',
-        'classes/timeline'
-], function($, utils, Timeline){
+        'classes/timeline',
+        'classes/element'
+], function($, utils, Timeline, Element){
 
   function Atom(snap, parentCircle){
 	  var color = "#F68F28";
+	  var cx = parseFloat(parentCircle.attr("cx")),
+  	  cy = parseFloat(parentCircle.attr("cy")),
+  	  r = parseFloat(parentCircle.attr("r"));
 
 	  if(typeof parentCircle != "undfeind"){
-		  var cx = parseFloat(parentCircle.attr("cx")),
-		  	  cy = parseFloat(parentCircle.attr("cy")),
-		  	  r = parseFloat(parentCircle.attr("r"));
 		  this.x = cx;
 		  this.y = cy;
 	  }
+
 	  var outer = snap.circle(this.x, this.y, 25);
+	  
+	  var elem = new Element();
+	  var props = elem.getProps();
+
 	  outer.attr({
-		  	stroke		:	color,
-		  	fill		:	color
+		  	stroke		:	props.color,
+		  	fill		:	props.color
 	  });
-	  this.graphics = snap.g(outer);
+
+	  var name = snap.text(cx,cy, props.name);
+	  var level = snap.text(cx, cy + 15, elem.getLevel())
+	  this.graphics = snap.g(outer, name, level);
   }
 
   /**
